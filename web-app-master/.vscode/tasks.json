@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Bump version",
+      "type": "shell",
+      "command": "PATTERN=${input:serviceName}-v;LATEST_TAG=$(git describe --tags --abbrev=0 --match '${input:serviceName}-v*'); TRIMMED_TAG=${LATEST_TAG//$PATTERN/''}; MAJOR=$(echo $TRIMMED_TAG | awk -F '.' '{print $1}'); MINOR=$(echo $TRIMMED_TAG | awk -F '.' '{print $2}'); PATCH=$(echo $TRIMMED_TAG | awk -F '.' '{print $3}'); case '${input:versionName}' in major) MAJOR=$(( $MAJOR + 1 ));; minor) MINOR=$(( $MINOR + 1 ));; patch) PATCH=$(( $PATCH + 1 ));; esac; NEXT_TAG=${PATTERN}$MAJOR.$MINOR.$PATCH; echo \"$LATEST_TAG -> $NEXT_TAG\"; git tag $NEXT_TAG;"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "versionName",
+      "type": "pickString",
+      "description": "Version Name",
+      "default": "minor",
+      "options": ["major", "minor", "patch"]
+    },
+    {
+      "id": "serviceName",
+      "type": "pickString",
+      "description": "Service Name",
+      "options": ["harrison", "emerson"]
+    }
+  ]
+}

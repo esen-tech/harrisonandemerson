@@ -1,0 +1,118 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="481px" height="350px" viewBox="-0.5 -0.5 481 350" content="&lt;mxfile&gt;&lt;diagram id=&quot;v4j9GYmTKs58xPlsLxlW&quot; name=&quot;Marketing&quot;&gt;7Znfb5swEMf/mrxO/ArLXkO77qGVqkbTHpELB1g1PmScJulfvyOYEAqTUJpEk4IURdzXB5zvY+MzzNwg3z4oVmRPGIOYOVa8nbl3M8fxfY/+K2FXC57r1EKqeFxLdius+AcY0TLqmsdQdhw1otC86IoRSgmR7mhMKdx03RIU3bsWLIWesIqY6Kt/eKyzWl0431v9F/A0a+5s+z/qlpw1zqYnZcZi3BxJ7v3MDRSiro/ybQCiyl2Tl/q8n/9oPQSmQOoxJ5i8vzOxNn0LEAtQTHOUAXEzYepd0/dyw3PBJFnLBKVemRaL7CjjIn5kO1xX9y41i94aa5mh4h/kzwQ12SRQs9IGreN3PFbVmeaaCkryeW46ZH+Snti24/jISt1Eg0KwouSv+/iqE3OmUi6XqDXmxokJnko6juhaoJo+1VHZHtn9hJocv4PSsD2STIIfAHPQakcupnVhWO+65qYdObZvtOx41Hi+GbFmtKaHK7dA6cAwHebr9vhGQ1CpJ3rPROEbBCiQUnEnsabMhfgklQWLuEwfIali9VrlxYRfSUgZSsR+cGc8jkFWkFAzzV4PI6ZALvW+e/Ml/SgLgfVtPptTTAHZdmvTr3JXOkBJYTK+xwGEewMV8g44ZxCcMxqcIeX440i51hlA2YseKtgWvJ6Joeb5RG0ctfk1qQ08QClyrnehZBOxkcQW1yRm+T1ihwUvVEBrxNuEbRQ2KmuuOdP6S9m9jH+XoALqxLPCeB3pF0hAKSamyuUslcuI0uWgZd2C9xzEvYFnaxyuCTlNVAINMrrRR2w7G75SzAyyO89k7Rczt1t3ngBroIa5HCy3/2StpxeECZdMRpyJEFVM0y7mZYRrqcNC8QhCllfGRPX0OueCVPtTkBbJHKel8RKb+ivv6r1+EVsoTBXLb3jf0Q75/3OH71nTovgVWFfd2HsDxWeSQKT5O9zw25gTsF11d+/1a5npLdpp3C65vSez/caxbzv6UOTe/wU=&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs>
+        <clipPath id="mx-clip-4-31-152-30-0">
+            <rect x="4" y="31" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-61-152-30-0">
+            <rect x="4" y="61" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-91-152-30-0">
+            <rect x="4" y="91" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-121-152-30-0">
+            <rect x="4" y="121" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-31-272-30-0">
+            <rect x="204" y="31" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-61-272-30-0">
+            <rect x="204" y="61" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-91-272-30-0">
+            <rect x="204" y="91" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-231-152-30-0">
+            <rect x="4" y="231" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-261-152-30-0">
+            <rect x="4" y="261" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-291-152-30-0">
+            <rect x="4" y="291" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-321-152-30-0">
+            <rect x="4" y="321" width="152" height="30"/>
+        </clipPath>
+    </defs>
+    <g>
+        <path d="M 0 26 L 0 0 L 160 0 L 160 26" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 26 L 0 146 L 160 146 L 160 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 26 L 160 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="79.5" y="18.5">
+                CooperationCode
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-31-152-30-0)" font-size="12px">
+            <text x="5.5" y="43.5">
+                code
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-61-152-30-0)" font-size="12px">
+            <text x="5.5" y="73.5">
+                expiration_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-91-152-30-0)" font-size="12px">
+            <text x="5.5" y="103.5">
+                entity_name
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-121-152-30-0)" font-size="12px">
+            <text x="5.5" y="133.5">
+                operation_remark
+            </text>
+        </g>
+        <path d="M 200 26 L 200 0 L 480 0 L 480 26" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 200 26 L 200 116 L 480 116 L 480 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 200 26 L 480 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="339.5" y="18.5">
+                EndUserCareProductReferralCode
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-31-272-30-0)" font-size="12px">
+            <text x="205.5" y="43.5">
+                end_user_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-61-272-30-0)" font-size="12px">
+            <text x="205.5" y="73.5">
+                code
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-91-272-30-0)" font-size="12px">
+            <text x="205.5" y="103.5">
+                referee_financial_order_discount_price_amount
+            </text>
+        </g>
+        <path d="M 0 226 L 0 200 L 160 200 L 160 226" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 226 L 0 346 L 160 346 L 160 226" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 226 L 160 226" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="79.5" y="218.5">
+                PromoCode
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-231-152-30-0)" font-size="12px">
+            <text x="5.5" y="243.5">
+                program_name
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-261-152-30-0)" font-size="12px">
+            <text x="5.5" y="273.5">
+                code
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-291-152-30-0)" font-size="12px">
+            <text x="5.5" y="303.5">
+                effective_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-321-152-30-0)" font-size="12px">
+            <text x="5.5" y="333.5">
+                expiration_time
+            </text>
+        </g>
+    </g>
+</svg>

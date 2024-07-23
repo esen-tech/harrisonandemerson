@@ -1,0 +1,2 @@
+class EsenException(Exception):
+    pass

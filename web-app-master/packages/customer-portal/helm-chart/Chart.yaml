@@ -1,0 +1,4 @@
+apiVersion: v1
+version: 1.0.0
+name: web-app-customer-portal
+description: Web app customer portal helm chart

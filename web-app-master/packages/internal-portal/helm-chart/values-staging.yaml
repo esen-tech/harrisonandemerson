@@ -1,0 +1,55 @@
+project:
+  name: web-app-internal-portal
+
+image:
+  repository: $REPOSITORY_NAME/web-app-internal-portal
+  tag: $IMAGE_TAG
+
+pod:
+  labels:
+    env: 'staging'
+    cluster: 'esen-cloud-staging'
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      cpu: 300m
+  priorityClassName: mid-priority
+  envs:
+    - name: NEXT_PUBLIC_ENV
+      value: staging
+    - name: NEXT_PUBLIC_IMAGE_TAG
+      value: $IMAGE_TAG
+    - name: PORT
+      value: '3000'
+
+healthz:
+  path: /
+  initialDelay: 300
+  period: 600
+  timeout: 10
+  success: 1
+  failure: 3
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  issuer: issuer-letsencrypt-staging
+  tls:
+    - hosts:
+        - harrison.stg-cloud.esenmedical.com
+      secretName: secret-stg-cloud-esenmedical-com-tls
+  rules:
+    - host: harrison.stg-cloud.esenmedical.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-app-internal-portal
+                port:
+                  number: 3000

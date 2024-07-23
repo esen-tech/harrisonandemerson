@@ -1,0 +1,13 @@
+{
+  "python.formatting.provider": "black",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "python.sortImports.args": ["--profile", "black"],
+  "editor.stickyScroll.enabled": true,
+  "[helm]": {
+    // `kubernetes` extension is required for this configuration
+    "editor.formatOnSave": false
+  }
+}

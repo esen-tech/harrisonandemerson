@@ -1,0 +1,37 @@
+project:
+  name: &project-name notification-event-consumer
+
+image:
+  repository: ${REPOSITORY_NAME}/${IMAGE_NAME}
+  tag: $RELEASE_IMAGE_TAG
+
+pod:
+  labels:
+    env: "production"
+    cluster: "esen-cloud-production"
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      cpu: 100m
+  priorityClassName: mid-priority
+  envs:
+    - name: ENV
+      value: production
+    - name: AMQP_URL
+      value: $AMQP_URL_PRODUCTION
+    - name: TWILIO_ACCOUNT_SID
+      value: $TWILIO_ACCOUNT_SID
+    - name: TWILIO_AUTH_TOKEN
+      value: $TWILIO_AUTH_TOKEN
+    - name: SENDGRID_API_KEY
+      value: $SENDGRID_API_KEY
+    - name: MAILERSEND_API_KEY
+      value: $MAILERSEND_API_KEY
+    - name: SLACK_BOT_TOKEN
+      value: $SLACK_BOT_TOKEN
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80

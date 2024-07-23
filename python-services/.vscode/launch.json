@@ -1,0 +1,782 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "[Harrison Gateway] [Entrypoint] Web Server",
+      "type": "python",
+      "request": "launch",
+      "module": "services.harrison_gateway.entrypoints.web_server",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing"
+      }
+    },
+    {
+      "name": "[Emerson Gateway] [Entrypoint] Web Server",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emerson_gateway.entrypoints.web_server",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing"
+      }
+    },
+    {
+      "name": "[IAM] [DB] Reset Schema",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["db", "reset-schema"],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam"
+      }
+    },
+    {
+      "name": "[IAM] [Schema Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/iam/database/schema_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam",
+        "IGNORE_BASE_SCHEMA_NAME": "TRUE"
+      }
+    },
+    {
+      "name": "[IAM] [Schema Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/iam/database/schema_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam"
+      }
+    },
+    {
+      "name": "[IAM] [Schema Migration] Downgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/iam/database/schema_revisions",
+        "downgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam"
+      }
+    },
+    {
+      "name": "[IAM] [Data Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/iam/database/data_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam"
+      }
+    },
+    {
+      "name": "[IAM] [Data Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/iam/database/data_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam"
+      }
+    },
+    {
+      "name": "[IAM] [Entrypoint] Web Server",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.web_server",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672",
+        "AIRTABLE_API_KEY": "keyfZMqpRMXSAlUdd",
+        "AIRTABLE_API_KEY_EDITOR": "keyITk5jInOhZNMgJ",
+        "SERVICE_ACCESS_TOKEN": "63kb7P6HXE^zD3V7"
+      }
+    },
+    {
+      "name": "[IAM] [Entrypoint] Event Consumer",
+      "type": "python",
+      "request": "launch",
+      "module": "services.iam.entrypoints.event_consumer",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_iam",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672",
+        "AIRTABLE_API_KEY": "keyfZMqpRMXSAlUdd",
+        "AIRTABLE_API_KEY_EDITOR": "keyITk5jInOhZNMgJ"
+      }
+    },
+    {
+      "name": "[Marketing] [DB] Reset Schema",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["db", "reset-schema"],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing"
+      }
+    },
+    {
+      "name": "[Marketing] [Schema Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/marketing/database/schema_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing",
+        "IGNORE_BASE_SCHEMA_NAME": "TRUE"
+      }
+    },
+    {
+      "name": "[Marketing] [Data Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/marketing/database/data_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing"
+      }
+    },
+    {
+      "name": "[Marketing] [Schema Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/marketing/database/schema_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing"
+      }
+    },
+    {
+      "name": "[Marketing] [Data Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/marketing/database/data_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing"
+      }
+    },
+    {
+      "name": "[Marketing] [Schema Migration] Downgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/marketing/database/schema_revisions",
+        "downgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing"
+      }
+    },
+    {
+      "name": "[Marketing] [Entrypoint] Web Server",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.web_server",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing",
+        "SERVICE_ACCESS_TOKEN": "sG$q9VKCQnB@7#+w"
+      }
+    },
+    {
+      "name": "[Marketing] [Entrypoint] Event Consumer",
+      "type": "python",
+      "request": "launch",
+      "module": "services.marketing.entrypoints.event_consumer",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_marketing",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672"
+      }
+    },
+    {
+      "name": "[Scheduling] [DB] Reset Schema",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["db", "reset-schema"],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling"
+      }
+    },
+    {
+      "name": "[Scheduling] [Schema Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/scheduling/database/schema_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling",
+        "IGNORE_BASE_SCHEMA_NAME": "TRUE"
+      }
+    },
+    {
+      "name": "[Scheduling] [Schema Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/scheduling/database/schema_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling"
+      }
+    },
+    {
+      "name": "[Scheduling] [Schema Migration] Downgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/scheduling/database/schema_revisions",
+        "downgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling"
+      }
+    },
+    {
+      "name": "[Scheduling] [Data Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/scheduling/database/data_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling"
+      }
+    },
+    {
+      "name": "[Scheduling] [Data Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/scheduling/database/data_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling"
+      }
+    },
+    {
+      "name": "[Scheduling] [Entrypoint] Web Server",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.web_server",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling",
+        "AIRTABLE_API_KEY": "keyfZMqpRMXSAlUdd",
+        "AIRTABLE_API_KEY_EDITOR": "keyITk5jInOhZNMgJ",
+        "SERVICE_ACCESS_TOKEN": "t&tQ!L*JMRgXAV4)"
+      }
+    },
+    {
+      "name": "[Scheduling] [Entrypoint] Event Consumer",
+      "type": "python",
+      "request": "launch",
+      "module": "services.scheduling.entrypoints.event_consumer",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_scheduling",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672"
+      }
+    },
+    {
+      "name": "[Product] [DB] Reset Schema",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["db", "reset-schema"],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product"
+      }
+    },
+    {
+      "name": "[Product] [Schema Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/product/database/schema_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product",
+        "IGNORE_BASE_SCHEMA_NAME": "TRUE"
+      }
+    },
+    {
+      "name": "[Product] [Schema Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/product/database/schema_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product"
+      }
+    },
+    {
+      "name": "[Product] [Schema Migration] Downgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/product/database/schema_revisions",
+        "downgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product"
+      }
+    },
+    {
+      "name": "[Product] [Data Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/product/database/data_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product"
+      }
+    },
+    {
+      "name": "[Product] [Data Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/product/database/data_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product"
+      }
+    },
+    {
+      "name": "[Product] [Entrypoint] Web Server",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.web_server",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672",
+        "SERVICE_ACCESS_TOKEN": "HmGmmSVG52KefurF",
+        // "ECPAY_MERCHANT_ID": "3250455",
+        // "ECPAY_HASH_KEY": "L7taRdW27MZCf3IW",
+        // "ECPAY_HASH_IV": "s9SAdnvksz92ZpaU",
+        "AIRTABLE_API_KEY": "keyfZMqpRMXSAlUdd",
+        "AIRTABLE_API_KEY_EDITOR": "keyITk5jInOhZNMgJ"
+      }
+    },
+    {
+      "name": "[Product] [Entrypoint] Event Consumer",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.event_consumer",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672",
+        "SERVICE_ACCESS_TOKEN": "HmGmmSVG52KefurF",
+        "AIRTABLE_API_KEY": "keyfZMqpRMXSAlUdd",
+        "AIRTABLE_API_KEY_EDITOR": "keyITk5jInOhZNMgJ"
+      }
+    },
+    {
+      "name": "[Product] [Entrypoint] Financial Order Synchronizer",
+      "type": "python",
+      "request": "launch",
+      "module": "services.product.entrypoints.financial_order_synchronizer",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_product",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672",
+        // "ECPAY_MERCHANT_ID": "3250455",
+        // "ECPAY_HASH_KEY": "L7taRdW27MZCf3IW",
+        // "ECPAY_HASH_IV": "s9SAdnvksz92ZpaU",
+        "AIRTABLE_API_KEY": "keyfZMqpRMXSAlUdd",
+        "AIRTABLE_API_KEY_EDITOR": "keyITk5jInOhZNMgJ"
+      }
+    },
+    {
+      "name": "[EMR] [DB] Reset Schema",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emr.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["db", "reset-schema"],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_emr"
+      }
+    },
+    {
+      "name": "[EMR] [Schema Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emr.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/emr/database/schema_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_emr",
+        "IGNORE_BASE_SCHEMA_NAME": "TRUE"
+      }
+    },
+    {
+      "name": "[EMR] [Schema Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emr.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/emr/database/schema_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_emr"
+      }
+    },
+    {
+      "name": "[EMR] [Schema Migration] Downgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emr.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "schema-migration",
+        "./services/emr/database/schema_revisions",
+        "downgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_emr"
+      }
+    },
+    {
+      "name": "[EMR] [Data Migration] Generate Revision",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emr.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/emr/database/data_revisions",
+        "generate-revision"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_emr"
+      }
+    },
+    {
+      "name": "[EMR] [Data Migration] Upgrade",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emr.entrypoints.command",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": [
+        "data-migration",
+        "./services/emr/database/data_revisions",
+        "upgrade"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_emr"
+      }
+    },
+    {
+      "name": "[EMR] [Entrypoint] Web Server",
+      "type": "python",
+      "request": "launch",
+      "module": "services.emr.entrypoints.web_server",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "DATABASE_URL": "postgresql+asyncpg://esen:esen@localhost:5432/esen",
+        "SCHEMA_NAME": "esen_emr",
+        "STORAGE_ENGINE_CREDENTIALS": "{\"type\":\"service_account\",\"project_id\":\"esen-342908\",\"private_key_id\":\"3f78df3bee789a98d3365d937d7050c2c7d4f1c4\",\"private_key\":\"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC32GHwRNGiB7pu\\nphcb2C43VtblQPS8yIpwPU+KU0OQFDR4GFi+FJiHQT3Jgnt/qKgry+VJvUoU9EQb\\nZ6lvR1mJmD/lxUFX68yOEHtQGZ/tIi/4M6laVr0WSrJ9OOTeet6FR9ooROfRR0eS\\nWkIe0n/OqAYN0NDkSe4tsMTUiOg1ilzwhvA0SHJVmHUEc9cC3Lm6zyKyIUklal0s\\neRhIHhYbR6/VCXieOe5S7qLHT9fmRMvZvc0NW9kjsy0aCmPhxH5ALVdvpeYGZBZA\\nQFXBRV6t5qJ5h7XVJS7uu5Hmj48WO1oNGMmdhkdKU7WE2MvwDJyagrDfXodHY+TD\\n/CWprcIBAgMBAAECggEAIGg/x2tSKsZC+ltDypA+gVnI8suS+K4/HQ7ptP/9cmnl\\nX+Am0Ibv5jO9cQaTv4qa7nF4Pxnjc7MlSFFrICcLJQKWDOpLHPT/b3F/UzzZIKN8\\nojt1GGwe082iDgnX6lHtZMAoOB4BYTY36xgG/MjtZ5/dxVSwZfWUSzCUWcSybjFi\\nx8nVaTNy6dFb7MusGqKUMYA7Nfzk9TG/unXwdN66Kl49KtE9ol7UsNvM5D91ifda\\nSeWIqxURQJyawr89dVQX/5w857O2llED/yZ95s9VOqj0YaGMj9V8ORK8QwpBJKOU\\nP71jiRIB+htA6pfQ7EM1TYqVPM+5Qy62JVF2WQ3lowKBgQD91RVFH4FSAx0wBdk+\\nzOs30fl6yiXwX8pz3qBzIjtx1QblOknwS6u7H7+TpwZDIroCqAltmiOD0VMJSCTH\\nOCz6x1QhmH3hfmMTYlhVBjqV+JOiwvUtE1eRDFGjhnbjVZdjdUqFsCXew6p+MYW0\\nwawKRjzVWkMHfTXTzFFXGvBoxwKBgQC5akv7NbuAPuLk3MC2JERYIChwmg4M/rFA\\nxl6Dg4c1wDM3ww8IEhrQJFCadEapJwT63uXPSZwnxL61lCNHIrRejKpDvzt3rvsI\\nP3nHgfFEKQFANQRonfKfR3lbo4cqjX2vUf/loKXM5Vgk8olyrUWaDrGlr27tyBNK\\nQr3tUJwG9wKBgCiNMDa4z8owYStY49oalsF2NCsfvGvogcl9GZkLMQAAjnd0lndj\\nP25Hpi2Kk3+KPrlJ6yetZlsax+9FrUp+eQEfcxti50ltDZr9LSt4MUfgTIXGK7El\\n0+mCVFCRnNC4zdS/2kX9XC94hvZeJwQ3pKqHihRztR2vLThG/f+yeBHlAoGBALeC\\nJAdSS+wG0YuPjM/4nwfVdBDV+DgWT5p7eomRQN4LBuYWkSb8vDrq5jeoA1NhAgXF\\nXA/Hm9ykVdfi8PNzvq6ha9a3SwUOUvf70uyJiB9cshc5Ic7lHH9WPx9afum3tgAy\\nGSHM2KwtBQs0XKL6KRvrlRkVw6VlUuo5mj5pfLNLAoGARPqCk67h89xqipZi/xef\\nxCRnOqiA+cRANPksFiIScX/pr5rGpE2AIBtTAqEcJMMV+GfYokASCOwxyqp4fXgk\\nHhQRgBX23T6D58AcgqBxZ9qTg/FMqeaHxc8pssqyS5VaOjmwK/AdQjD77Ttx4QHY\\nLDbjn0O3lMgu+rlfwQN8XFU=\\n-----END PRIVATE KEY-----\\n\",\"client_email\":\"cloud-storage-bot-2022-05-23@esen-342908.iam.gserviceaccount.com\",\"client_id\":\"109487927557067061520\",\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://oauth2.googleapis.com/token\",\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\",\"client_x509_cert_url\":\"https://www.googleapis.com/robot/v1/metadata/x509/cloud-storage-bot-2022-05-23%40esen-342908.iam.gserviceaccount.com\"}",
+        "AIRTABLE_API_KEY": "keyfZMqpRMXSAlUdd",
+        "AIRTABLE_API_KEY_EDITOR": "keyITk5jInOhZNMgJ",
+        "SERVICE_ACCESS_TOKEN": "rx6fRTpwyEqB5@Pp"
+      }
+    },
+    {
+      "name": "[Notification] [Entrypoint] Event Consumer",
+      "type": "python",
+      "request": "launch",
+      "module": "services.notification.entrypoints.event_consumer",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+      "justMyCode": false,
+      "args": ["\n", "exit", "0"],
+      "env": {
+        "ENV": "developing",
+        "AMQP_URL": "amqp://esen:esen@localhost:5672",
+        "TWILIO_ACCOUNT_SID": "AC125ec24a730f2a2744e4566194476ebb",
+        "TWILIO_AUTH_TOKEN": "e37d5c45e98e2e55377ae6b020b1d765",
+        "SENDGRID_API_KEY": "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",
+        "MAILERSEND_API_KEY": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODAwODVmZjM5YjkyNzEzY2QwN2M2YWIwNjhlNzVkNjRjODExZTM3OTQ3MGVkZjI3NDNhNzg5OGU2MjlhNDQ0OTI0MjIwYzJjNmNiZGNkZWUiLCJpYXQiOjE2NzIxOTg4MjYuNDIwMDY5LCJuYmYiOjE2NzIxOTg4MjYuNDIwMDcyLCJleHAiOjQ4Mjc4NzI0MjYuNDE1OTEyLCJzdWIiOiI1MTE2NyIsInNjb3BlcyI6WyJlbWFpbF9mdWxsIiwiZG9tYWluc19mdWxsIiwiYWN0aXZpdHlfZnVsbCIsImFuYWx5dGljc19mdWxsIiwidG9rZW5zX2Z1bGwiLCJ3ZWJob29rc19mdWxsIiwidGVtcGxhdGVzX2Z1bGwiLCJzdXBwcmVzc2lvbnNfZnVsbCIsInNtc19mdWxsIiwiZW1haWxfdmVyaWZpY2F0aW9uX2Z1bGwiLCJpbmJvdW5kc19mdWxsIiwicmVjaXBpZW50c19mdWxsIl19.elzveC1fXgfjeXFXCTk9uF6v8oDl4ro0F3RRjUDWFLlJ9gG_Ky9xiFxAj_shwQ5x7dzMyn6Om9vmhnPMic1Dmy-F5y6YlQKptFFtLAQ86ROrclrrOHVY_ydOQ3Ti17Od-eCRX8VQIaoA9qge84n6tky2D9UfBKdcgcKkjmtHCFBJEFowfDv4MlgoXPipckga5zNiLxoQCoarYOSthRhnLXF7QkG7uDsSBiiQKWa9ifYhpfL6eV7L3ZCz_2xsLoMP89dBbNbhuitgTEg0E8UGrmthjXhIALtAS1-U8r3m4EDms2P4RZUH7uxxvJ2W2LCpy0ma6i9c9Lr0S9JLtIokDHWuF_Wh-zH4350ymtRQ7bCScznoMlruWiNrlADJJeVpCx_lqdz3WgvtyL0xEI1W6YToeipeN34PbJa7y-RFoRnrNk387g0X-tJGXIIdzq27Aev8iQfJ3EbZxyQxofhxW6GEdbwwwE3KAmySqc4LJC8nHr55bvmMtmEvAHnTAPjd9DuzYk8jMeyV3OsnqT3XaaRsL6JahFhvR8lFFuY9-WyvfFl1F79m35z-HsjBM9hVZmnMmgI0eTmaJO_JpVJO3qAMgE3MQkZW2mUw6AloCG0CxpGVnoBTp2eULaVzoUCKCH9x3VVW5r436L6xF1ghEkIYGA5LT8WWZ5ZxkK3E3KI",
+        "SLACK_BOT_TOKEN": "xoxb-987728085124-4279351164992-23tsiWnmg1KabepEP9fzHxcc"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "[Harrison & Emerson] Launch Stack",
+      "configurations": [
+        "[Harrison Gateway] [Entrypoint] Web Server",
+        "[Emerson Gateway] [Entrypoint] Web Server",
+        "[IAM] [Entrypoint] Web Server",
+        "[IAM] [Entrypoint] Event Consumer",
+        "[Marketing] [Entrypoint] Web Server",
+        "[Marketing] [Entrypoint] Event Consumer",
+        "[Notification] [Entrypoint] Event Consumer",
+        "[Scheduling] [Entrypoint] Web Server",
+        "[Scheduling] [Entrypoint] Event Consumer",
+        "[Product] [Entrypoint] Web Server",
+        "[Product] [Entrypoint] Event Consumer",
+        // "[Product] [Entrypoint] Financial Order Synchronizer",
+        "[EMR] [Entrypoint] Web Server"
+      ],
+      "stopAll": true
+    }
+  ]
+}

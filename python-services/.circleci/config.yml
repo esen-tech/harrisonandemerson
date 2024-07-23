@@ -1,0 +1,1231 @@
+version: 2.1
+
+commands:
+  install_envsubst:
+    steps:
+      - run:
+          name: Install envsubst
+          command: |
+            apt-get install -qq -y gettext
+  install_helm:
+    steps:
+      - run:
+          name: Install helm
+          command: |
+            curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+  install_docker_compose:
+    steps:
+      - run:
+          name: Install docker-compose
+          command: |
+            curl -L "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+  gcloud_auth:
+    steps:
+      - run:
+          name: gcloud Auth
+          command: |
+            echo $GCLOUD_CREDENTIAL_JSON > /tmp/gcloud_credential.json
+            gcloud auth login --cred-file=/tmp/gcloud_credential.json
+            rm -f /tmp/gcloud_credential.json
+  configure_docker:
+    parameters:
+      gcp_artifact_registry_location:
+        type: string
+        default: "asia-east1"
+    steps:
+      - run:
+          name: Configure Docker
+          command: |
+            gcloud auth configure-docker <<parameters.gcp_artifact_registry_location>>-docker.pkg.dev
+  kubectl_auth:
+    parameters:
+      cluster_name:
+        type: string
+      project_id:
+        type: string
+        default: "esen-342908"
+      zone:
+        type: string
+        default: "asia-east1-a"
+    steps:
+      - run:
+          name: kubectl Auth
+          command: |
+            # configures kubectl to use the cluster
+            gcloud --quiet config set project <<parameters.project_id>>
+            gcloud --quiet config set compute/zone <<parameters.zone>>
+            gcloud --quiet container clusters get-credentials <<parameters.cluster_name>>
+  import_environment_variables:
+    parameters:
+      service_name:
+        type: string
+      entrypoint_name:
+        type: string
+    steps:
+      - attach_workspace:
+          at: ./my-persist-workspace
+      - run:
+          name: Import Persisted Environment Variable
+          command: |
+            cat ./my-persist-workspace/<<parameters.service_name>>-<<parameters.entrypoint_name>>/persist-env-var.txt >> $BASH_ENV
+
+jobs:
+  release_image:
+    resource_class: small
+    docker:
+      - image: google/cloud-sdk
+    parameters:
+      service_name:
+        type: string
+      entrypoint_name:
+        type: string
+    environment:
+      - GCP_PROJECT_ID: "esen-342908"
+      - GCP_ARTIFACT_REGISTRY_LOCATION: "asia-east1"
+      - GCP_ARTIFACT_REGISTRY_REPOSITORY: "esen-registry"
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Setup Environment Variables
+          command: |
+            IMAGE_NAME=<<parameters.service_name>>_<<parameters.entrypoint_name>>
+            SYSTEM_IMAGE_TAG=ci-<<pipeline.number>>-$(echo $CIRCLE_SHA1 | cut -c 1-8)
+            RELEASE_IMAGE_TAG=$CIRCLE_TAG
+            REPOSITORY_NAME=$GCP_ARTIFACT_REGISTRY_LOCATION-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_ARTIFACT_REGISTRY_REPOSITORY
+            SYSTEM_FULL_IMAGE_NAME=$REPOSITORY_NAME/$IMAGE_NAME:$SYSTEM_IMAGE_TAG
+            RELEASE_FULL_IMAGE_NAME=$REPOSITORY_NAME/$IMAGE_NAME:$RELEASE_IMAGE_TAG
+
+            PERSIST_FOLDER_PATH=./my-persist-workspace/<<parameters.service_name>>-<<parameters.entrypoint_name>>
+            PERSIST_FILE_PATH=$PERSIST_FOLDER_PATH/persist-env-var.txt
+            mkdir -p $PERSIST_FOLDER_PATH
+            touch $PERSIST_FILE_PATH
+            echo "export IMAGE_NAME=$IMAGE_NAME" >> $PERSIST_FILE_PATH
+            echo "export SYSTEM_IMAGE_TAG=$SYSTEM_IMAGE_TAG" >> $PERSIST_FILE_PATH
+            echo "export RELEASE_IMAGE_TAG=$RELEASE_IMAGE_TAG" >> $PERSIST_FILE_PATH
+            echo "export REPOSITORY_NAME=$REPOSITORY_NAME" >> $PERSIST_FILE_PATH
+            echo "export SYSTEM_FULL_IMAGE_NAME=$SYSTEM_FULL_IMAGE_NAME" >> $PERSIST_FILE_PATH
+            echo "export RELEASE_FULL_IMAGE_NAME=$RELEASE_FULL_IMAGE_NAME" >> $PERSIST_FILE_PATH
+            cat $PERSIST_FILE_PATH >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build \
+              --build-arg SERVICE_NAME=<<parameters.service_name>> \
+              --build-arg ENTRYPOINT_NAME=<<parameters.entrypoint_name>> \
+              --build-arg IMAGE_NAME=$IMAGE_NAME \
+              --build-arg RELEASE_IMAGE_TAG=$RELEASE_IMAGE_TAG \
+              -t $SYSTEM_FULL_IMAGE_NAME \
+              -t $RELEASE_FULL_IMAGE_NAME \
+              -f ./services/<<parameters.service_name>>/deployments/<<parameters.entrypoint_name>>/Dockerfile ./
+      - gcloud_auth
+      - configure_docker
+      - run:
+          name: Push Docker Image
+          command: |
+            docker push $REPOSITORY_NAME/$IMAGE_NAME --all-tags
+      - persist_to_workspace:
+          root: ./my-persist-workspace
+          paths:
+            - "*/persist-env-var.txt"
+
+  deploy_to_cluster:
+    resource_class: small
+    docker:
+      - image: google/cloud-sdk
+    parameters:
+      cluster_name:
+        type: string
+      service_name:
+        type: string
+      entrypoint_name:
+        type: string
+      helm_value_file_name:
+        type: string
+    steps:
+      - checkout
+      - import_environment_variables:
+          service_name: <<parameters.service_name>>
+          entrypoint_name: <<parameters.entrypoint_name>>
+      - install_envsubst
+      - install_helm
+      - gcloud_auth
+      - kubectl_auth:
+          cluster_name: <<parameters.cluster_name>>
+      - run:
+          name: Install or Upgrade Helm Chart
+          command: |
+            CHART_PATH=./services/<<parameters.service_name>>/deployments/<<parameters.entrypoint_name>>/helm_chart
+            envsubst < $CHART_PATH/<<parameters.helm_value_file_name>> >> $CHART_PATH/values.yaml
+            SERVICE_NAME=<<parameters.service_name>>
+            ENTRYPOINT_NAME=<<parameters.entrypoint_name>>
+            helm upgrade ${SERVICE_NAME//_/-}-${ENTRYPOINT_NAME//_/-} $CHART_PATH --install
+
+  execute_command:
+    resource_class: small
+    docker:
+      - image: google/cloud-sdk
+    parameters:
+      service_name:
+        type: string
+      entrypoint_name:
+        type: string
+      database_url_env_var_name:
+        type: string
+      schema_name:
+        type: string
+      command:
+        type: string
+    steps:
+      - setup_remote_docker
+      - import_environment_variables:
+          service_name: <<parameters.service_name>>
+          entrypoint_name: <<parameters.entrypoint_name>>
+      - gcloud_auth
+      - configure_docker
+      - run:
+          name: Run Command
+          command: |
+            docker run --rm \
+              -e DATABASE_URL=$<<parameters.database_url_env_var_name>> \
+              -e SCHEMA_NAME=<<parameters.schema_name>> \
+              $RELEASE_FULL_IMAGE_NAME \
+              -- <<parameters.command>>
+
+workflows:
+  version: 2
+
+  ######################
+  ## Harrison Gateway ##
+  ######################
+  harrison_gateway_workflow:
+    jobs:
+      - release_image:
+          name: release_web_server_image
+          service_name: "harrison_gateway"
+          entrypoint_name: "web_server"
+          filters: &filters-harrison-gateway
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^harrison-gateway-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_web_server_image
+          filters:
+            <<: *filters-harrison-gateway
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-harrison-gateway
+      - deploy_to_cluster:
+          name: deploy_web_server_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "harrison_gateway"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-harrison-gateway
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-harrison-gateway
+      - deploy_to_cluster:
+          name: deploy_web_server_production
+          cluster_name: "esen-cloud-production"
+          service_name: "harrison_gateway"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-harrison-gateway
+
+  #####################
+  ## Emerson Gateway ##
+  #####################
+  emerson_gateway_workflow:
+    jobs:
+      - release_image:
+          name: release_web_server_image
+          service_name: "emerson_gateway"
+          entrypoint_name: "web_server"
+          filters: &filters-ermerson-gateway
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^emerson-gateway-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_web_server_image
+          filters:
+            <<: *filters-ermerson-gateway
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-ermerson-gateway
+      - deploy_to_cluster:
+          name: deploy_web_server_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "emerson_gateway"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-ermerson-gateway
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-ermerson-gateway
+      - deploy_to_cluster:
+          name: deploy_web_server_production
+          cluster_name: "esen-cloud-production"
+          service_name: "emerson_gateway"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-ermerson-gateway
+
+  #########
+  ## IAM ##
+  #########
+  iam_workflow:
+    jobs:
+      - release_image:
+          name: release_command_image
+          service_name: "iam"
+          entrypoint_name: "command"
+          filters: &filters-iam
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^iam-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - release_image:
+          name: release_web_server_image
+          service_name: "iam"
+          entrypoint_name: "web_server"
+          filters:
+            <<: *filters-iam
+      - release_image:
+          name: release_event_consumer_image
+          service_name: "iam"
+          entrypoint_name: "event_consumer"
+          filters:
+            <<: *filters-iam
+      - request_reset_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-iam
+      - execute_command:
+          name: reset_schema_staging
+          service_name: "iam"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_iam"
+          command: "db reset-schema"
+          requires:
+            - request_reset_schema_staging
+          filters:
+            <<: *filters-iam
+      - request_upgrade_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-iam
+      - execute_command:
+          name: upgrade_schema_staging
+          service_name: "iam"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_iam"
+          command: "schema-migration ./services/iam/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_staging
+          filters:
+            <<: *filters-iam
+      - request_upgrade_data_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-iam
+      - execute_command:
+          name: upgrade_data_staging
+          service_name: "iam"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_iam"
+          command: "data-migration ./services/iam/database/data_revisions upgrade"
+          requires:
+            - request_upgrade_data_staging
+          filters:
+            <<: *filters-iam
+      # - request_reset_schema_production:
+      #     type: approval
+      #     requires:
+      #       - release_command_image
+      #     filters:
+      #       <<: *filters-iam
+      # - execute_command:
+      #     name: reset_schema_production
+      #     service_name: "iam"
+      #     entrypoint_name: "command"
+      #     database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+      #     schema_name: "esen_iam"
+      #     command: "db reset-schema"
+      #     requires:
+      #       - request_reset_schema_production
+      #     filters:
+      #       <<: *filters-iam
+      - request_upgrade_schema_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-iam
+      - execute_command:
+          name: upgrade_schema_production
+          service_name: "iam"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_iam"
+          command: "schema-migration ./services/iam/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_production
+          filters:
+            <<: *filters-iam
+      - request_upgrade_data_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-iam
+      - execute_command:
+          name: upgrade_data_production
+          service_name: "iam"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_iam"
+          command: "data-migration ./services/iam/database/data_revisions upgrade"
+          requires:
+            - request_upgrade_data_production
+          filters:
+            <<: *filters-iam
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_web_server_image
+            - release_event_consumer_image
+          filters:
+            <<: *filters-iam
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-iam
+      - deploy_to_cluster:
+          name: deploy_web_server_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "iam"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-iam
+      - deploy_to_cluster:
+          name: deploy_event_consumer_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "iam"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-iam
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-iam
+      - deploy_to_cluster:
+          name: deploy_web_server_production
+          cluster_name: "esen-cloud-production"
+          service_name: "iam"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-iam
+      - deploy_to_cluster:
+          name: deploy_event_consumer_production
+          cluster_name: "esen-cloud-production"
+          service_name: "iam"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-iam
+
+  ##################
+  ## Notification ##
+  ##################
+  notification_workflow:
+    jobs:
+      - release_image:
+          name: release_event_consumer_image
+          service_name: "notification"
+          entrypoint_name: "event_consumer"
+          filters: &filters-notification
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^notification-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_event_consumer_image
+          filters:
+            <<: *filters-notification
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-notification
+      - deploy_to_cluster:
+          name: deploy_event_consumer_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "notification"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-notification
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-notification
+      - deploy_to_cluster:
+          name: deploy_event_consumer_production
+          cluster_name: "esen-cloud-production"
+          service_name: "notification"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-notification
+
+  ################
+  ## Scheduling ##
+  ################
+  scheduling_workflow:
+    jobs:
+      - release_image:
+          name: release_command_image
+          service_name: "scheduling"
+          entrypoint_name: "command"
+          filters: &filters-scheduling
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^scheduling-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - release_image:
+          name: release_web_server_image
+          service_name: "scheduling"
+          entrypoint_name: "web_server"
+          filters:
+            <<: *filters-scheduling
+      - release_image:
+          name: release_event_consumer_image
+          service_name: "scheduling"
+          entrypoint_name: "event_consumer"
+          filters:
+            <<: *filters-scheduling
+      - request_reset_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-scheduling
+      - execute_command:
+          name: reset_schema_staging
+          service_name: "scheduling"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_scheduling"
+          command: "db reset-schema"
+          requires:
+            - request_reset_schema_staging
+          filters:
+            <<: *filters-scheduling
+      - request_upgrade_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-scheduling
+      - execute_command:
+          name: upgrade_schema_staging
+          service_name: "scheduling"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_scheduling"
+          command: "schema-migration ./services/scheduling/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_staging
+          filters:
+            <<: *filters-scheduling
+      # - request_reset_schema_production:
+      #     type: approval
+      #     requires:
+      #       - release_command_image
+      #     filters:
+      #       <<: *filters-scheduling
+      # - execute_command:
+      #     name: reset_schema_production
+      #     service_name: "scheduling"
+      #     entrypoint_name: "command"
+      #     database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+      #     schema_name: "esen_scheduling"
+      #     command: "db reset-schema"
+      #     requires:
+      #       - request_reset_schema_production
+      #     filters:
+      #       <<: *filters-scheduling
+      - request_upgrade_schema_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-scheduling
+      - execute_command:
+          name: upgrade_schema_production
+          service_name: "scheduling"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_scheduling"
+          command: "schema-migration ./services/scheduling/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_production
+          filters:
+            <<: *filters-scheduling
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_web_server_image
+            - release_event_consumer_image
+          filters:
+            <<: *filters-scheduling
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-scheduling
+      - deploy_to_cluster:
+          name: deploy_web_server_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "scheduling"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-scheduling
+      - deploy_to_cluster:
+          name: deploy_event_consumer_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "scheduling"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-scheduling
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-scheduling
+      - deploy_to_cluster:
+          name: deploy_web_server_production
+          cluster_name: "esen-cloud-production"
+          service_name: "scheduling"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-scheduling
+      - deploy_to_cluster:
+          name: deploy_event_consumer_production
+          cluster_name: "esen-cloud-production"
+          service_name: "scheduling"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-scheduling
+
+  #########
+  ## EMR ##
+  #########
+  emr_workflow:
+    jobs:
+      - release_image:
+          name: release_command_image
+          service_name: "emr"
+          entrypoint_name: "command"
+          filters: &filters-emr
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^emr-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - release_image:
+          name: release_web_server_image
+          service_name: "emr"
+          entrypoint_name: "web_server"
+          filters:
+            <<: *filters-emr
+      - request_reset_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-emr
+      - execute_command:
+          name: reset_schema_staging
+          service_name: "emr"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_emr"
+          command: "db reset-schema"
+          requires:
+            - request_reset_schema_staging
+          filters:
+            <<: *filters-emr
+      - request_upgrade_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-emr
+      - execute_command:
+          name: upgrade_schema_staging
+          service_name: "emr"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_emr"
+          command: "schema-migration ./services/emr/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_staging
+          filters:
+            <<: *filters-emr
+      # - request_reset_schema_production:
+      #     type: approval
+      #     requires:
+      #       - release_command_image
+      #     filters:
+      #       <<: *filters-emr
+      # - execute_command:
+      #     name: reset_schema_production
+      #     service_name: "emr"
+      #     entrypoint_name: "command"
+      #     database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+      #     schema_name: "esen_emr"
+      #     command: "db reset-schema"
+      #     requires:
+      #       - request_reset_schema_production
+      #     filters:
+      #       <<: *filters-emr
+      - request_upgrade_schema_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-emr
+      - execute_command:
+          name: upgrade_schema_production
+          service_name: "emr"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_emr"
+          command: "schema-migration ./services/emr/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_production
+          filters:
+            <<: *filters-emr
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_web_server_image
+          filters:
+            <<: *filters-emr
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-emr
+      - deploy_to_cluster:
+          name: deploy_web_server_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "emr"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-emr
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-emr
+      - deploy_to_cluster:
+          name: deploy_web_server_production
+          cluster_name: "esen-cloud-production"
+          service_name: "emr"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-emr
+
+  ###############
+  ## Marketing ##
+  ###############
+  marketing_workflow:
+    jobs:
+      - release_image:
+          name: release_command_image
+          service_name: "marketing"
+          entrypoint_name: "command"
+          filters: &filters-marketing
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^marketing-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - release_image:
+          name: release_web_server_image
+          service_name: "marketing"
+          entrypoint_name: "web_server"
+          filters:
+            <<: *filters-marketing
+      - release_image:
+          name: release_event_consumer_image
+          service_name: "marketing"
+          entrypoint_name: "event_consumer"
+          filters:
+            <<: *filters-marketing
+      - request_reset_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-marketing
+      - execute_command:
+          name: reset_schema_staging
+          service_name: "marketing"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_marketing"
+          command: "db reset-schema"
+          requires:
+            - request_reset_schema_staging
+          filters:
+            <<: *filters-marketing
+      - request_upgrade_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-marketing
+      - execute_command:
+          name: upgrade_schema_staging
+          service_name: "marketing"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_marketing"
+          command: "schema-migration ./services/marketing/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_staging
+          filters:
+            <<: *filters-marketing
+      - request_upgrade_data_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-marketing
+      - execute_command:
+          name: upgrade_data_staging
+          service_name: "marketing"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_marketing"
+          command: "data-migration ./services/marketing/database/data_revisions upgrade"
+          requires:
+            - request_upgrade_data_staging
+          filters:
+            <<: *filters-marketing
+      # - request_reset_schema_production:
+      #     type: approval
+      #     requires:
+      #       - release_command_image
+      #     filters:
+      #       <<: *filters-marketing
+      # - execute_command:
+      #     name: reset_schema_production
+      #     service_name: "marketing"
+      #     entrypoint_name: "command"
+      #     database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+      #     schema_name: "esen_marketing"
+      #     command: "db reset-schema"
+      #     requires:
+      #       - request_reset_schema_production
+      #     filters:
+      #       <<: *filters-marketing
+      - request_upgrade_schema_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-marketing
+      - execute_command:
+          name: upgrade_schema_production
+          service_name: "marketing"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_marketing"
+          command: "schema-migration ./services/marketing/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_production
+          filters:
+            <<: *filters-marketing
+      - request_upgrade_data_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-marketing
+      - execute_command:
+          name: upgrade_data_production
+          service_name: "marketing"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_marketing"
+          command: "data-migration ./services/marketing/database/data_revisions upgrade"
+          requires:
+            - request_upgrade_data_production
+          filters:
+            <<: *filters-marketing
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_web_server_image
+            - release_event_consumer_image
+          filters:
+            <<: *filters-marketing
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-marketing
+      - deploy_to_cluster:
+          name: deploy_web_server_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "marketing"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-marketing
+      - deploy_to_cluster:
+          name: deploy_event_consumer_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "marketing"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-marketing
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-marketing
+      - deploy_to_cluster:
+          name: deploy_web_server_production
+          cluster_name: "esen-cloud-production"
+          service_name: "marketing"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-marketing
+      - deploy_to_cluster:
+          name: deploy_event_consumer_production
+          cluster_name: "esen-cloud-production"
+          service_name: "marketing"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-marketing
+
+  #############
+  ## Product ##
+  #############
+  product_workflow:
+    jobs:
+      - release_image:
+          name: release_command_image
+          service_name: "product"
+          entrypoint_name: "command"
+          filters: &filters-product
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^product-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - release_image:
+          name: release_web_server_image
+          service_name: "product"
+          entrypoint_name: "web_server"
+          filters:
+            <<: *filters-product
+      - release_image:
+          name: release_event_consumer_image
+          service_name: "product"
+          entrypoint_name: "event_consumer"
+          filters:
+            <<: *filters-product
+      - release_image:
+          name: release_financial_order_synchronizer_image
+          service_name: "product"
+          entrypoint_name: "financial_order_synchronizer"
+          filters:
+            <<: *filters-product
+      - request_reset_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-product
+      - execute_command:
+          name: reset_schema_staging
+          service_name: "product"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_product"
+          command: "db reset-schema"
+          requires:
+            - request_reset_schema_staging
+          filters:
+            <<: *filters-product
+      - request_upgrade_schema_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-product
+      - execute_command:
+          name: upgrade_schema_staging
+          service_name: "product"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_product"
+          command: "schema-migration ./services/product/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_staging
+          filters:
+            <<: *filters-product
+      - request_upgrade_data_staging:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-product
+      - execute_command:
+          name: upgrade_data_staging
+          service_name: "product"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_STAGING"
+          schema_name: "esen_product"
+          command: "data-migration ./services/product/database/data_revisions upgrade"
+          requires:
+            - request_upgrade_data_staging
+          filters:
+            <<: *filters-product
+      # - request_reset_schema_production:
+      #     type: approval
+      #     requires:
+      #       - release_command_image
+      #     filters:
+      #       <<: *filters-product
+      # - execute_command:
+      #     name: reset_schema_production
+      #     service_name: "product"
+      #     entrypoint_name: "command"
+      #     database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+      #     schema_name: "esen_product"
+      #     command: "db reset-schema"
+      #     requires:
+      #       - request_reset_schema_production
+      #     filters:
+      #       <<: *filters-product
+      - request_upgrade_schema_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-product
+      - execute_command:
+          name: upgrade_schema_production
+          service_name: "product"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_product"
+          command: "schema-migration ./services/product/database/schema_revisions upgrade"
+          requires:
+            - request_upgrade_schema_production
+          filters:
+            <<: *filters-product
+      - request_upgrade_data_production:
+          type: approval
+          requires:
+            - release_command_image
+          filters:
+            <<: *filters-product
+      - execute_command:
+          name: upgrade_data_production
+          service_name: "product"
+          entrypoint_name: "command"
+          database_url_env_var_name: "DATABASE_URL_PRODUCTION"
+          schema_name: "esen_product"
+          command: "data-migration ./services/product/database/data_revisions upgrade"
+          requires:
+            - request_upgrade_data_production
+          filters:
+            <<: *filters-product
+      - request_manage_deployment:
+          type: approval
+          requires:
+            - release_web_server_image
+            - release_event_consumer_image
+            - release_financial_order_synchronizer_image
+          filters:
+            <<: *filters-product
+      - request_deploy_staging:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-product
+      - deploy_to_cluster:
+          name: deploy_web_server_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "product"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-product
+      - deploy_to_cluster:
+          name: deploy_event_consumer_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "product"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-product
+      - deploy_to_cluster:
+          name: deploy_financial_order_synchronizer_staging
+          cluster_name: "esen-cloud-staging"
+          service_name: "product"
+          entrypoint_name: "financial_order_synchronizer"
+          helm_value_file_name: "values-staging.yaml"
+          requires:
+            - request_deploy_staging
+          filters:
+            <<: *filters-product
+      - request_deploy_production:
+          type: approval
+          requires:
+            - request_manage_deployment
+          filters:
+            <<: *filters-product
+      - deploy_to_cluster:
+          name: deploy_web_server_production
+          cluster_name: "esen-cloud-production"
+          service_name: "product"
+          entrypoint_name: "web_server"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-product
+      - deploy_to_cluster:
+          name: deploy_event_consumer_production
+          cluster_name: "esen-cloud-production"
+          service_name: "product"
+          entrypoint_name: "event_consumer"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-product
+      - deploy_to_cluster:
+          name: deploy_financial_order_synchronizer_production
+          cluster_name: "esen-cloud-production"
+          service_name: "product"
+          entrypoint_name: "financial_order_synchronizer"
+          helm_value_file_name: "values-production.yaml"
+          requires:
+            - request_deploy_production
+          filters:
+            <<: *filters-product
+

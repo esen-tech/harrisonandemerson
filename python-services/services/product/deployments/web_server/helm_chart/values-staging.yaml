@@ -1,0 +1,70 @@
+project:
+  name: &project-name product-web-server
+
+image:
+  repository: ${REPOSITORY_NAME}/${IMAGE_NAME}
+  tag: $RELEASE_IMAGE_TAG
+
+pod:
+  labels:
+    env: "staging"
+    cluster: "esen-cloud-staging"
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      cpu: 100m
+  priorityClassName: mid-priority
+  envs:
+    - name: ENV
+      value: staging
+    - name: DATABASE_URL
+      value: $DATABASE_URL_STAGING
+    - name: SCHEMA_NAME
+      value: esen_product
+    - name: AMQP_URL
+      value: $AMQP_URL_STAGING
+    - name: SERVICE_ACCESS_TOKEN
+      value: $PRODUCT_SERVICE_ACCESS_TOKEN
+    - name: ECPAY_MERCHANT_ID
+      value: "$ECPAY_MERCHANT_ID"
+    - name: ECPAY_HASH_KEY
+      value: "$ECPAY_HASH_KEY"
+    - name: ECPAY_HASH_IV
+      value: "$ECPAY_HASH_IV"
+    - name: AIRTABLE_API_KEY
+      value: $AIRTABLE_API_KEY
+    - name: AIRTABLE_API_KEY_EDITOR
+      value: $AIRTABLE_API_KEY_EDITOR
+  port: &pod-port 9007
+
+healthz:
+  path: /
+  initialDelay: 300
+  period: 600
+  timeout: 10
+  success: 1
+  failure: 3
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  issuer: issuer-letsencrypt-staging
+  tls:
+    - hosts:
+        - product.stg-cloud.esenmedical.com
+      secretName: secret-stg-cloud-esenmedical-com-tls
+  rules:
+    - host: product.stg-cloud.esenmedical.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: *project-name
+                port:
+                  number: *pod-port

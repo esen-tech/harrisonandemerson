@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  database:
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: esen
+      POSTGRES_PASSWORD: esen
+      POSTGRES_DB: esen
+    ports:
+      - "5432:5432"
+  pubsub:
+    image: rabbitmq:3.8-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: esen
+      RABBITMQ_DEFAULT_PASS: esen
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  emerson_api_gateway:
+    build:
+      context: ./
+      dockerfile: ./services/emerson_api_gateway/Dockerfile
+      args:
+        APP_NAME: "emerson_api_gateway"
+        RELEASE_IMAGE_TAG: "local"
+    environment:
+      ENV: "developing"
+      IAM_API_HOST: "http://iam_api:9001"
+    ports:
+      - "8001:8001" # outside:inside
+  iam_api:
+    build:
+      context: ./
+      dockerfile: ./services/iam_api/Dockerfile
+      args:
+        APP_NAME: "iam_api"
+        RELEASE_IMAGE_TAG: "local"
+    environment:
+      ENV: "developing"
+    ports:
+      - "9001:9001" # outside:inside

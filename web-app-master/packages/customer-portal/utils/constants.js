@@ -1,0 +1,5 @@
+export const ESEN_CLINIC_ORGANIZATION_UUID =
+  '0cbc6a66-4c84-4b8c-9534-0e000b1d26dc'
+
+export const ESEN_COMPANY_ORGANIZATION_UUID =
+  '094b55bd-33ff-41da-a744-0559a1a666fa'

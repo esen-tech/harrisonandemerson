@@ -1,0 +1,13 @@
+{
+  "name": "web-app",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "The monorepo for esen frontend web apps",
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "cp",
+  "dependencies": {
+    "next-transpile-modules": "^9.0.0"
+  }
+}

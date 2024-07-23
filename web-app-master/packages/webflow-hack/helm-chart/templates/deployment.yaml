@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.project.name }}
+  labels:
+    app: {{ .Values.project.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.project.name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.project.name }}
+        env: {{ .Values.pod.labels.env }}
+        cluster: {{ .Values.pod.labels.cluster }}
+    spec:
+      priorityClassName: {{ .Values.pod.priorityClassName }}
+      containers:
+      - name: {{ .Values.project.name }}
+        image: {{ printf "%s:%s" .Values.image.repository .Values.image.tag }}
+        env:
+{{ toYaml .Values.pod.envs | indent 8 }}
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        resources:
+          requests:
+            cpu: {{ .Values.pod.resources.requests.cpu }}
+          limits:
+            cpu: {{ .Values.pod.resources.limits.cpu }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.healthz.path | default "/" }}
+            port: http
+          initialDelaySeconds: {{ .Values.healthz.initialDelay | default 10 }}
+          periodSeconds: {{ .Values.healthz.period | default 15 }}
+          timeoutSeconds: {{ .Values.healthz.timeout | default 5 }}
+          successThreshold: {{ .Values.healthz.success | default 1 }}
+          failureThreshold: {{ .Values.healthz.failure | default 3 }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.healthz.path | default "/" }}
+            port: http

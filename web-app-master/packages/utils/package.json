@@ -1,0 +1,11 @@
+{
+  "name": "@esen/utils",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "date-fns": "^2.28.0",
+    "lodash": "^4.17.21",
+    "uuid": "^9.0.0"
+  }
+}

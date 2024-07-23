@@ -1,0 +1,295 @@
+version: 2.1
+
+commands:
+  install_envsubst:
+    steps:
+      - run:
+          name: Install envsubst
+          command: |
+            apt-get install -qq -y gettext
+  install_helm:
+    steps:
+      - run:
+          name: Install helm
+          command: |
+            curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+  gcloud_auth:
+    steps:
+      - run:
+          name: gcloud Auth
+          command: |
+            echo $GCLOUD_CREDENTIAL_JSON > /tmp/gcloud_credential.json
+            gcloud auth login --cred-file=/tmp/gcloud_credential.json
+            rm -f /tmp/gcloud_credential.json
+  configure_docker:
+    parameters:
+      gcp_artifact_registry_location:
+        type: string
+        default: 'asia-east1'
+    steps:
+      - run:
+          name: Configure Docker
+          command: |
+            gcloud auth configure-docker <<parameters.gcp_artifact_registry_location>>-docker.pkg.dev
+  kubectl_auth:
+    parameters:
+      cluster_name:
+        type: string
+      project_id:
+        type: string
+        default: 'esen-342908'
+      zone:
+        type: string
+        default: 'asia-east1-a'
+    steps:
+      - run:
+          name: kubectl Auth
+          command: |
+            # configures kubectl to use the cluster
+            gcloud --quiet config set project <<parameters.project_id>>
+            gcloud --quiet config set compute/zone <<parameters.zone>>
+            gcloud --quiet container clusters get-credentials <<parameters.cluster_name>>
+
+jobs:
+  release_image:
+    resource_class: small
+    docker:
+      - image: google/cloud-sdk
+    parameters:
+      app:
+        type: string
+    environment:
+      - GCP_PROJECT_ID: 'esen-342908'
+      - GCP_ARTIFACT_REGISTRY_LOCATION: 'asia-east1'
+      - GCP_ARTIFACT_REGISTRY_REPOSITORY: 'esen-registry'
+    steps:
+      - checkout
+      - setup_remote_docker:
+          # https://support.circleci.com/hc/en-us/articles/360050934711-Docker-build-fails-with-EPERM-operation-not-permitted-copyfile-when-using-node-14-9-0-or-later-
+          version: 20.10.11
+      - run:
+          name: Setup Environment Variables
+          command: |
+            IMAGE_NAME=web-app-<<parameters.app>>
+            IMAGE_TAG=release-$(echo $CIRCLE_SHA1 | cut -c 1-8)-<<pipeline.number>>
+            REPOSITORY_NAME=$GCP_ARTIFACT_REGISTRY_LOCATION-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_ARTIFACT_REGISTRY_REPOSITORY
+            FULL_IMAGE_NAME=$REPOSITORY_NAME/$IMAGE_NAME:$IMAGE_TAG
+            mkdir -p ./my-persist-workspace
+            touch ./my-persist-workspace/persist-env-var.txt
+            echo "export IMAGE_NAME=$IMAGE_NAME" >> ./my-persist-workspace/persist-env-var.txt
+            echo "export IMAGE_TAG=$IMAGE_TAG" >> ./my-persist-workspace/persist-env-var.txt
+            echo "export REPOSITORY_NAME=$REPOSITORY_NAME" >> ./my-persist-workspace/persist-env-var.txt
+            echo "export FULL_IMAGE_NAME=$FULL_IMAGE_NAME" >> ./my-persist-workspace/persist-env-var.txt
+            cat ./my-persist-workspace/persist-env-var.txt >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build \
+              --build-arg IMAGE_TAG=$IMAGE_TAG \
+              -t $FULL_IMAGE_NAME \
+              -f ./packages/<<parameters.app>>/Dockerfile .
+      - gcloud_auth
+      - configure_docker
+      - run:
+          name: Push Docker Image
+          command: |
+            docker push $FULL_IMAGE_NAME
+      - persist_to_workspace:
+          root: ./my-persist-workspace
+          paths:
+            - persist-env-var.txt
+  deploy_to_cluster:
+    resource_class: small
+    docker:
+      - image: google/cloud-sdk
+    parameters:
+      app:
+        type: string
+      cluster_name:
+        type: string
+      helm_chart_name:
+        type: string
+      helm_value_file_name:
+        type: string
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./my-persist-workspace
+      - run:
+          name: Retrieve Persisted Environment Variable
+          command: |
+            cat ./my-persist-workspace/persist-env-var.txt >> $BASH_ENV
+      - install_envsubst
+      - install_helm
+      - gcloud_auth
+      - kubectl_auth:
+          cluster_name: <<parameters.cluster_name>>
+      - run:
+          name: Install or Upgrade Helm Chart
+          command: |
+            CHART_PATH=./packages/<<parameters.app>>/helm-chart
+            envsubst < $CHART_PATH/<<parameters.helm_value_file_name>> >> $CHART_PATH/values.yaml
+            helm upgrade <<parameters.helm_chart_name>> $CHART_PATH --install
+
+  # deploy_to_cloud_run:
+  #   docker:
+  #     - image: google/cloud-sdk
+  #   parameters:
+  #     environment:
+  #       type: string
+  #     app:
+  #       type: string
+  #   environment:
+  #     - GCP_PROJECT_ID: "esen-342908"
+  #     - GCP_CLOUD_RUN_REGION: "asia-east1"
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: ./my-persist-workspace
+  #     - run:
+  #         name: Retrieve Persisted Environment Variable
+  #         command: |
+  #           cat ./my-persist-workspace/persist-env-var.txt >> $BASH_ENV
+  #     - gcloud_auth
+  #     - run:
+  #         name: Deploy
+  #         command: |
+  #           gcloud run deploy web-app-<<parameters.app>>-<<parameters.environment>> \
+  #             --image $FULL_IMAGE_NAME \
+  #             --set-env-vars NEXT_PUBLIC_ENV=<<parameters.environment>>,NEXT_PUBLIC_IMAGE_TAG=$IMAGE_TAG \
+  #             --project $GCP_PROJECT_ID \
+  #             --platform managed \
+  #             --region $GCP_CLOUD_RUN_REGION \
+  #             --allow-unauthenticated
+
+workflows:
+  version: 2
+  default_workflow:
+    jobs:
+      ##############
+      ## Harrison ##
+      ##############
+      - release_image:
+          name: release_internal_portal_image
+          app: 'internal-portal'
+          filters: &filters-release-harrison
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^harrison-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - request_deploy_internal_portal_staging:
+          type: approval
+          requires:
+            - release_internal_portal_image
+          filters:
+            <<: *filters-release-harrison
+      - deploy_to_cluster:
+          app: 'internal-portal'
+          cluster_name: 'esen-cloud-staging'
+          helm_chart_name: 'web-app-internal-portal'
+          helm_value_file_name: 'values-staging.yaml'
+          requires:
+            - request_deploy_internal_portal_staging
+          filters:
+            <<: *filters-release-harrison
+      - request_deploy_internal_portal_production:
+          type: approval
+          requires:
+            - release_internal_portal_image
+          filters:
+            <<: *filters-release-harrison
+      - deploy_to_cluster:
+          app: 'internal-portal'
+          cluster_name: 'esen-cloud-production'
+          helm_chart_name: 'web-app-internal-portal'
+          helm_value_file_name: 'values-production.yaml'
+          requires:
+            - request_deploy_internal_portal_production
+          filters:
+            <<: *filters-release-harrison
+
+      ##############
+      ## Ermerson ##
+      ##############
+      - release_image:
+          name: release_customer_portal_image
+          app: 'customer-portal'
+          filters: &filters-release-emerson
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^emerson-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - request_deploy_customer_portal_staging:
+          type: approval
+          requires:
+            - release_customer_portal_image
+          filters:
+            <<: *filters-release-emerson
+      - deploy_to_cluster:
+          app: 'customer-portal'
+          cluster_name: 'esen-cloud-staging'
+          helm_chart_name: 'web-app-customer-portal'
+          helm_value_file_name: 'values-staging.yaml'
+          requires:
+            - request_deploy_customer_portal_staging
+          filters:
+            <<: *filters-release-emerson
+      - request_deploy_customer_portal_production:
+          type: approval
+          requires:
+            - release_customer_portal_image
+          filters:
+            <<: *filters-release-emerson
+      - deploy_to_cluster:
+          app: 'customer-portal'
+          cluster_name: 'esen-cloud-production'
+          helm_chart_name: 'web-app-customer-portal'
+          helm_value_file_name: 'values-production.yaml'
+          requires:
+            - request_deploy_customer_portal_production
+          filters:
+            <<: *filters-release-emerson
+
+      ##################
+      ## Webflow Hack ##
+      ##################
+      - release_image:
+          name: release_webflow_hack_image
+          app: 'webflow-hack'
+          filters: &filters-release-webflow-hack
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^webflow-hack-v([0-9]+)\.([0-9]+)\.([0-9]+)*/
+      - request_deploy_webflow_hack_staging:
+          type: approval
+          requires:
+            - release_webflow_hack_image
+          filters:
+            <<: *filters-release-webflow-hack
+      - deploy_to_cluster:
+          app: 'webflow-hack'
+          cluster_name: 'esen-cloud-staging'
+          helm_chart_name: 'web-app-webflow-hack'
+          helm_value_file_name: 'values-staging.yaml'
+          requires:
+            - request_deploy_webflow_hack_staging
+          filters:
+            <<: *filters-release-webflow-hack
+      - request_deploy_webflow_hack_production:
+          type: approval
+          requires:
+            - release_webflow_hack_image
+          filters:
+            <<: *filters-release-webflow-hack
+      - deploy_to_cluster:
+          app: 'webflow-hack'
+          cluster_name: 'esen-cloud-production'
+          helm_chart_name: 'web-app-webflow-hack'
+          helm_value_file_name: 'values-production.yaml'
+          requires:
+            - request_deploy_webflow_hack_production
+          filters:
+            <<: *filters-release-webflow-hack

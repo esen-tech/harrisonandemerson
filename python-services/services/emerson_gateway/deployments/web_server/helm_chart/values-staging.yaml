@@ -1,0 +1,52 @@
+project:
+  name: &project-name emerson-gateway
+
+image:
+  repository: ${REPOSITORY_NAME}/${IMAGE_NAME}
+  tag: $RELEASE_IMAGE_TAG
+
+pod:
+  labels:
+    env: "staging"
+    cluster: "esen-cloud-staging"
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      cpu: 100m
+  priorityClassName: mid-priority
+  envs:
+    - name: ENV
+      value: staging
+  port: &pod-port 8001
+
+healthz:
+  path: /
+  initialDelay: 300
+  period: 600
+  timeout: 10
+  success: 1
+  failure: 3
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  issuer: issuer-letsencrypt-staging
+  tls:
+    - hosts:
+        - emerson-gateway.stg-cloud.esenmedical.com
+      secretName: secret-stg-cloud-esenmedical-com-tls
+  rules:
+    - host: emerson-gateway.stg-cloud.esenmedical.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: *project-name
+                port:
+                  number: *pod-port

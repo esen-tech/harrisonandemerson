@@ -1,0 +1,488 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="721px" height="1060px" viewBox="-0.5 -0.5 721 1060" content="&lt;mxfile&gt;&lt;diagram id=&quot;v4j9GYmTKs58xPlsLxlW&quot; name=&quot;Scheduling&quot;&gt;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&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs>
+        <clipPath id="mx-clip-444-31-192-30-0">
+            <rect x="444" y="31" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-444-111-192-30-0">
+            <rect x="444" y="111" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-31-192-30-0">
+            <rect x="204" y="31" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-61-192-30-0">
+            <rect x="204" y="61" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-91-192-30-0">
+            <rect x="204" y="91" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-121-192-30-0">
+            <rect x="204" y="121" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-151-192-30-0">
+            <rect x="204" y="151" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-181-192-30-0">
+            <rect x="204" y="181" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-34-152-30-0">
+            <rect x="4" y="34" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-64-152-30-0">
+            <rect x="4" y="64" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-94-152-30-0">
+            <rect x="4" y="94" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-124-152-30-0">
+            <rect x="4" y="124" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-154-152-30-0">
+            <rect x="4" y="154" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-184-152-30-0">
+            <rect x="4" y="184" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-214-152-30-0">
+            <rect x="4" y="214" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-244-152-30-0">
+            <rect x="4" y="244" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-274-152-30-0">
+            <rect x="4" y="274" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-304-152-30-0">
+            <rect x="4" y="304" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-444-271-272-30-0">
+            <rect x="444" y="271" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-444-301-272-30-0">
+            <rect x="444" y="301" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-444-391-232-30-0">
+            <rect x="444" y="391" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-444-421-232-30-0">
+            <rect x="444" y="421" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-311-192-30-0">
+            <rect x="204" y="311" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-341-192-30-0">
+            <rect x="204" y="341" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-371-192-30-0">
+            <rect x="204" y="371" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-204-401-192-30-0">
+            <rect x="204" y="401" width="192" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-511-232-30-0">
+            <rect x="4" y="511" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-541-232-30-0">
+            <rect x="4" y="541" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-571-232-30-0">
+            <rect x="4" y="571" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-601-232-30-0">
+            <rect x="4" y="601" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-631-232-30-0">
+            <rect x="4" y="631" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-661-232-30-0">
+            <rect x="4" y="661" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-691-232-30-0">
+            <rect x="4" y="691" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-721-232-30-0">
+            <rect x="4" y="721" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-4-751-232-30-0">
+            <rect x="4" y="751" width="232" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-44-831-272-30-0">
+            <rect x="44" y="831" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-44-861-272-30-0">
+            <rect x="44" y="861" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-44-891-272-30-0">
+            <rect x="44" y="891" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-44-921-272-30-0">
+            <rect x="44" y="921" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-44-951-272-30-0">
+            <rect x="44" y="951" width="272" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-564-751-112-30-0">
+            <rect x="564" y="751" width="112" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-364-787-152-30-0">
+            <rect x="364" y="787" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-364-817-152-30-0">
+            <rect x="364" y="817" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-364-847-152-30-0">
+            <rect x="364" y="847" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-364-877-152-30-0">
+            <rect x="364" y="877" width="152" height="30"/>
+        </clipPath>
+        <clipPath id="mx-clip-84-1031-312-30-0">
+            <rect x="84" y="1031" width="312" height="30"/>
+        </clipPath>
+    </defs>
+    <g>
+        <path d="M 440 26 L 440 0 L 640 0 L 640 26" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 440 26 L 440 56 L 640 56 L 640 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 26 L 640 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="539.5" y="18.5">
+                InternalUserTimeSlotInventory
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-444-31-192-30-0)" font-size="12px">
+            <text x="445.5" y="43.5">
+                internal_user_reference
+            </text>
+        </g>
+        <path d="M 440 106 L 440 80 L 640 80 L 640 106" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 106 L 440 136 L 640 136 L 640 106" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 106 L 640 106" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="539.5" y="98.5">
+                RoomTimeSlotInventory
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-444-111-192-30-0)" font-size="12px">
+            <text x="445.5" y="123.5">
+                room_reference
+            </text>
+        </g>
+        <path d="M 200 26 L 200 0 L 400 0 L 400 26" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 200 26 L 200 206 L 400 206 L 400 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 200 26 L 400 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="299.5" y="18.5">
+                AbstractTimeSlotInventory
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-31-192-30-0)" font-size="12px">
+            <text x="205.5" y="43.5">
+                organization_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-61-192-30-0)" font-size="12px">
+            <text x="205.5" y="73.5">
+                _time_slot_start_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-91-192-30-0)" font-size="12px">
+            <text x="205.5" y="103.5">
+                _time_slot_end_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-121-192-30-0)" font-size="12px">
+            <text x="205.5" y="133.5">
+                total_inventory
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-151-192-30-0)" font-size="12px">
+            <text x="205.5" y="163.5">
+                total_allocated
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-181-192-30-0)" font-size="12px">
+            <text x="205.5" y="193.5">
+                _version
+            </text>
+        </g>
+        <path d="M 450.4 56 L 406.08 69.85" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 401.07 71.42 L 406.7 65.99 L 406.08 69.85 L 408.79 72.67 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 105.92 L 406.37 105.22" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 401.12 105.11 L 408.19 101.75 L 406.37 105.22 L 408.04 108.75 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 29 L 0 3 L 160 3 L 160 29" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 29 L 0 329 L 160 329 L 160 29" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 29 L 160 29" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="79.5" y="21.5">
+                Appointment
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-34-152-30-0)" font-size="12px">
+            <text x="5.5" y="46.5">
+                organization_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-64-152-30-0)" font-size="12px">
+            <text x="5.5" y="76.5">
+                service_product_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-94-152-30-0)" font-size="12px">
+            <text x="5.5" y="106.5">
+                end_user_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-124-152-30-0)" font-size="12px">
+            <text x="5.5" y="136.5">
+                principal_name
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-154-152-30-0)" font-size="12px">
+            <text x="5.5" y="166.5">
+                principal_phone_number
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-184-152-30-0)" font-size="12px">
+            <text x="5.5" y="196.5">
+                evaluated_start_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-214-152-30-0)" font-size="12px">
+            <text x="5.5" y="226.5">
+                evaluated_end_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-244-152-30-0)" font-size="12px">
+            <text x="5.5" y="256.5">
+                state
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-274-152-30-0)" font-size="12px">
+            <text x="5.5" y="286.5">
+                cooperation_code_code
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-304-152-30-0)" font-size="12px">
+            <text x="5.5" y="316.5">
+                airtable_reference
+            </text>
+        </g>
+        <path d="M 440 266 L 440 240 L 720 240 L 720 266" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 266 L 440 326 L 720 326 L 720 266" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 266 L 720 266" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="579.5" y="258.5">
+                InternalUserAppointmentTimeSlot
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-444-271-272-30-0)" font-size="12px">
+            <text x="445.5" y="283.5">
+                internal_user_time_slot_inventory_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-444-301-272-30-0)" font-size="12px">
+            <text x="445.5" y="313.5">
+                internal_user_reference
+            </text>
+        </g>
+        <path d="M 160 321 L 192.29 321" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 199.29 321 L 195.79 324.5 L 192.29 321 L 195.79 317.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 386 L 440 360 L 680 360 L 680 386" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 386 L 440 446 L 680 446 L 680 386" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 386 L 680 386" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="559.5" y="378.5">
+                RoomAppointmentTimeSlot
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-444-391-232-30-0)" font-size="12px">
+            <text x="445.5" y="403.5">
+                room_time_slot_inventory_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-444-421-232-30-0)" font-size="12px">
+            <text x="445.5" y="433.5">
+                room_reference
+            </text>
+        </g>
+        <path d="M 200 306 L 200 280 L 400 280 L 400 306" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 200 306 L 200 426 L 400 426 L 400 306" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 200 306 L 400 306" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="299.5" y="298.5">
+                AbstractAppointmentTimeSlot
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-311-192-30-0)" font-size="12px">
+            <text x="205.5" y="323.5">
+                appointment
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-341-192-30-0)" font-size="12px">
+            <text x="205.5" y="353.5">
+                _time_slot_start_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-371-192-30-0)" font-size="12px">
+            <text x="205.5" y="383.5">
+                _time_slot_end_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-204-401-192-30-0)" font-size="12px">
+            <text x="205.5" y="413.5">
+                allocated_inventory
+            </text>
+        </g>
+        <path d="M 440 318 L 406.18 326.46" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 401.08 327.73 L 407.03 322.64 L 406.18 326.46 L 408.72 329.43 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 440 379.92 L 406.25 373.43" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 401.1 372.44 L 408.63 370.33 L 406.25 373.43 L 407.31 377.2 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 506 L 0 480 L 240 480 L 240 506" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 506 L 0 776 L 240 776 L 240 506" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 506 L 240 506" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="119.5" y="498.5">
+                Schedule
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-511-232-30-0)" font-size="12px">
+            <text x="5.5" y="523.5">
+                organization_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-541-232-30-0)" font-size="12px">
+            <text x="5.5" y="553.5">
+                name
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-571-232-30-0)" font-size="12px">
+            <text x="5.5" y="583.5">
+                min_date
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-601-232-30-0)" font-size="12px">
+            <text x="5.5" y="613.5">
+                max_date
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-631-232-30-0)" font-size="12px">
+            <text x="5.5" y="643.5">
+                timezone_offset_in_minutes
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-661-232-30-0)" font-size="12px">
+            <text x="5.5" y="673.5">
+                last_publish_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-691-232-30-0)" font-size="12px">
+            <text x="5.5" y="703.5">
+                schedule_dates
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-721-232-30-0)" font-size="12px">
+            <text x="5.5" y="733.5">
+                schedule_time_slots
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-751-232-30-0)" font-size="12px">
+            <text x="5.5" y="763.5">
+                schedule_date_schedule_time_slots
+            </text>
+        </g>
+        <path d="M 40 826 L 40 800 L 320 800 L 320 826" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 40 826 L 40 976 L 320 976 L 320 826" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 40 826 L 320 826" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="179.5" y="818.5">
+                ScheduleDateScheduleTimeSlot
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-44-831-272-30-0)" font-size="12px">
+            <text x="45.5" y="843.5">
+                schedule_date_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-44-861-272-30-0)" font-size="12px">
+            <text x="45.5" y="873.5">
+                schedule_time_slot_reference
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-44-891-272-30-0)" font-size="12px">
+            <text x="45.5" y="903.5">
+                override_schedule_time_slot_start_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-44-921-272-30-0)" font-size="12px">
+            <text x="45.5" y="933.5">
+                override_schedule_time_slot_end_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-44-951-272-30-0)" font-size="12px">
+            <text x="45.5" y="963.5">
+                schedule_date_schedule_time_slot_internal_users
+            </text>
+        </g>
+        <path d="M 560 746 L 560 720 L 680 720 L 680 746" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 560 746 L 560 776 L 680 776 L 680 746" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 560 746 L 680 746" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="619.5" y="738.5">
+                ScheduleDate
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-564-751-112-30-0)" font-size="12px">
+            <text x="565.5" y="763.5">
+                date
+            </text>
+        </g>
+        <path d="M 240 701 L 600 701 L 600 712.29" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 600 719.29 L 596.5 715.79 L 600 712.29 L 603.5 715.79 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 360 782 L 360 756 L 520 756 L 520 782" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 360 782 L 360 902 L 520 902 L 520 782" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 360 782 L 520 782" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="439.5" y="774.5">
+                ScheduleTimeSlot
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-364-787-152-30-0)" font-size="12px">
+            <text x="365.5" y="799.5">
+                name
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-364-817-152-30-0)" font-size="12px">
+            <text x="365.5" y="829.5">
+                start_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-364-847-152-30-0)" font-size="12px">
+            <text x="365.5" y="859.5">
+                end_time
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-364-877-152-30-0)" font-size="12px">
+            <text x="365.5" y="889.5">
+                weekday_indices
+            </text>
+        </g>
+        <path d="M 240 731 L 400 731 L 400 748.29" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 400 755.29 L 396.5 751.79 L 400 748.29 L 403.5 751.79 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 240 761 L 280 761 L 280 792.29" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 280 799.29 L 276.5 795.79 L 280 792.29 L 283.5 795.79 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 80 1026 L 80 1000 L 400 1000 L 400 1026" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 80 1026 L 80 1056 L 400 1056 L 400 1026" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 80 1026 L 400 1026" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="14px">
+            <text x="239.5" y="1018.5">
+                ScheduleDateScheduleTimeSlotInternalUser
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-84-1031-312-30-0)" font-size="12px">
+            <text x="85.5" y="1043.5">
+                internal_user_reference
+            </text>
+        </g>
+        <path d="M 320 961 L 320 921 L 360 921 L 360 992.29" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 360 999.29 L 356.5 995.79 L 360 992.29 L 363.5 995.79 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+    </g>
+</svg>

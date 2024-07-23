@@ -1,0 +1,62 @@
+project:
+  name: &project-name emr-web-server
+
+image:
+  repository: ${REPOSITORY_NAME}/${IMAGE_NAME}
+  tag: $RELEASE_IMAGE_TAG
+
+pod:
+  labels:
+    env: "production"
+    cluster: "esen-cloud-production"
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      cpu: 100m
+  priorityClassName: mid-priority
+  envs:
+    - name: ENV
+      value: production
+    - name: DATABASE_URL
+      value: $DATABASE_URL_PRODUCTION
+    - name: SCHEMA_NAME
+      value: esen_emr
+    - name: STORAGE_ENGINE_CREDENTIALS
+      value: $STORAGE_ENGINE_CREDENTIALS
+    - name: AIRTABLE_API_KEY
+      value: $AIRTABLE_API_KEY
+    - name: SERVICE_ACCESS_TOKEN
+      value: $EMR_SERVICE_ACCESS_TOKEN
+  port: &pod-port 9005
+
+healthz:
+  path: /
+  initialDelay: 300
+  period: 600
+  timeout: 10
+  success: 1
+  failure: 3
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  issuer: issuer-letsencrypt-production
+  tls:
+    - hosts:
+        - emr.cloud.esenmedical.com
+      secretName: secret-cloud-esenmedical-com-tls
+  rules:
+    - host: emr.cloud.esenmedical.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: *project-name
+                port:
+                  number: *pod-port

@@ -1,0 +1,16 @@
+from pydantic import BaseModel
+
+
+class ConfigSchema(BaseModel):
+    DOCS_URL: str | None
+    EMERSON_GATEWAY_HOST: str
+    HARRISON_GATEWAY_HOST: str
+    IAM_API_HOST: str
+    SCHEDULING_API_HOST: str
+    EMR_API_HOST: str
+    MARKETING_API_HOST: str
+    PRODUCT_API_HOST: str
+    AIRTABLE_INTEGRATION_API_HOST: str
+    SERVICE_ACCESS_TOKEN_COOKIE_KEY: str
+    INTERNAL_USER_ACCESS_TOKEN_COOKIE_KEY: str
+    END_USER_ACCESS_TOKEN_COOKIE_KEY: str

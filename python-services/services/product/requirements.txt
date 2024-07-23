@@ -1,0 +1,10 @@
+SQLAlchemy==1.4.32
+alembic==1.7.7
+asyncpg==0.25.0
+fastapi==0.74.1
+httpx==0.22.0
+kombu==5.2.4
+pydantic==1.9.0
+requests==2.28.1
+sentry-sdk==1.9.3
+uvicorn==0.17.5

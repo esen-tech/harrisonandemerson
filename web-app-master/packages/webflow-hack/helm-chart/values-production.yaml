@@ -1,0 +1,55 @@
+project:
+  name: web-app-webflow-hack
+
+image:
+  repository: $REPOSITORY_NAME/web-app-webflow-hack
+  tag: $IMAGE_TAG
+
+pod:
+  labels:
+    env: 'production'
+    cluster: 'esen-cloud-production'
+  resources:
+    requests:
+      cpu: 50m
+    limits:
+      cpu: 100m
+  priorityClassName: low-priority
+  envs:
+    - name: NEXT_PUBLIC_ENV
+      value: production
+    - name: NEXT_PUBLIC_IMAGE_TAG
+      value: $IMAGE_TAG
+    - name: PORT
+      value: '3000'
+
+healthz:
+  path: /
+  initialDelay: 300
+  period: 600
+  timeout: 10
+  success: 1
+  failure: 3
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  issuer: issuer-letsencrypt-production
+  tls:
+    - hosts:
+        - webflow-hack.cloud.esenmedical.com
+      secretName: secret-cloud-esenmedical-com-tls
+  rules:
+    - host: webflow-hack.cloud.esenmedical.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-app-webflow-hack
+                port:
+                  number: 3000

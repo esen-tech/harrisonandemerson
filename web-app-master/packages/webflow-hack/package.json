@@ -1,0 +1,14 @@
+{
+  "name": "webflow-hack",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p $PORT"
+  },
+  "dependencies": {
+    "next": "^12.2.4",
+    "sharp": "^0.30.3"
+  }
+}

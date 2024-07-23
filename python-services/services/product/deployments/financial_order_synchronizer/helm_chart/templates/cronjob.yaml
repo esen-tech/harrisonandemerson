@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.project.name }}
+  labels:
+    app: {{ .Values.project.name }}
+spec:
+  schedule: "{{ .Values.cronjob.schedule }}"
+  jobTemplate:
+    spec:
+      parallelism: 1
+      template:
+        spec:
+          priorityClassName: {{ .Values.pod.priorityClassName }}
+          containers:
+          - name: {{ .Values.project.name }}
+            image: {{ printf "%s:%s" .Values.image.repository .Values.image.tag }}
+            imagePullPolicy: IfNotPresent
+            env:
+{{ toYaml .Values.pod.envs | indent 12 }}
+          restartPolicy: Never

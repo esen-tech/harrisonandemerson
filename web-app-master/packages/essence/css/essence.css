@@ -1,0 +1,114 @@
+/* font */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
+
+/* custom properties */
+:root {
+  --es-font-family-noto-sans-tc: 'Noto Sans TC', sans-serif;
+
+  --es-font-size-1: 0.75rem; /* 12 */
+  --es-font-size-2: 0.875rem; /* 14 */
+  --es-font-size-3: 1rem; /* 16 */
+  --es-font-size-4: 1.125rem; /* 18 */
+  --es-font-size-5: 1.25rem; /* 20 */
+  --es-font-size-6: 1.5rem; /* 24 */
+  --es-font-size-7: 1.75rem; /* 28 */
+  --es-font-size-8: 2rem; /* 32 */
+  --es-font-size-9: 2.25rem; /* 36 */
+  --es-font-size-10: 2.5rem; /* 40 */
+
+  --es-font-weight-400: 400;
+  --es-font-weight-500: 500;
+  --es-font-weight-700: 700;
+
+  --es-line-height-1: 1rem; /* 16 */
+  --es-line-height-2: 1.125rem; /* 18 */
+  --es-line-height-3: 1.25rem; /* 20 */
+  --es-line-height-4: 1.5rem; /* 24 */
+  --es-line-height-5: 1.75rem; /* 28 */
+  --es-line-height-6: 1.875rem; /* 30 */
+  --es-line-height-7: 2.25rem; /* 36 */
+  --es-line-height-8: 2.625rem; /* 42 */
+  --es-line-height-9: 3rem; /* 48 */
+  --es-line-height-10: 3.375rem; /* 54 */
+  --es-line-height-11: 3.75rem; /* 60 */
+
+  --es-space-0: 0px;
+  --es-space-4: 4px;
+  --es-space-8: 8px;
+  --es-space-12: 12px;
+  --es-space-14: 14px;
+  --es-space-16: 16px;
+  --es-space-20: 20px;
+  --es-space-24: 24px;
+  --es-space-28: 28px;
+  --es-space-32: 32px;
+  --es-space-36: 36px;
+  --es-space-40: 40px;
+  --es-space-44: 44px;
+  --es-space-52: 52px;
+  --es-space-56: 56px;
+  --es-space-60: 60px;
+  --es-space-64: 64px;
+
+  --es-border-radius-0: 4px;
+  --es-border-radius-1: 8px;
+  --es-border-radius-2: 16px;
+
+  --es-white: hsla(0, 0%, 100%, 1);
+  --es-dark: hsla(0, 0%, 2%, 1);
+
+  --es-neutral-50: hsla(0, 0%, 98%, 1);
+  --es-neutral-100: hsla(0, 0%, 96%, 1);
+  --es-neutral-200: hsla(60, 2%, 89%, 1);
+  --es-neutral-300: hsla(30, 2%, 82%, 1);
+  --es-neutral-400: hsla(20, 2%, 65%, 1);
+  --es-neutral-500: hsla(30, 2%, 45%, 1);
+  --es-neutral-600: hsla(30, 4%, 29%, 1);
+  --es-neutral-700: hsla(30, 4%, 21%, 1);
+  --es-neutral-800: hsla(30, 3%, 13%, 1);
+  --es-neutral-900: hsla(30, 5%, 9%, 1);
+
+  --es-negative-50: hsla(0, 86%, 97%, 1);
+  --es-negative-100: hsla(0, 93%, 94%, 1);
+  --es-negative-200: hsla(0, 96%, 89%, 1);
+  --es-negative-300: hsla(0, 94%, 82%, 1);
+  --es-negative-400: hsla(0, 91%, 71%, 1);
+  --es-negative-500: hsla(0, 84%, 60%, 1);
+  --es-negative-600: hsla(0, 72%, 51%, 1);
+  --es-negative-700: hsla(0, 74%, 42%, 1);
+  --es-negative-800: hsla(0, 70%, 35%, 1);
+  --es-negative-900: hsla(0, 63%, 31%, 1);
+
+  --es-positive-50: hsla(138, 76%, 97%, 1);
+  --es-positive-100: hsla(141, 84%, 93%, 1);
+  --es-positive-200: hsla(141, 79%, 85%, 1);
+  --es-positive-300: hsla(142, 77%, 73%, 1);
+  --es-positive-400: hsla(142, 69%, 58%, 1);
+  --es-positive-500: hsla(142, 71%, 45%, 1);
+  --es-positive-600: hsla(142, 76%, 36%, 1);
+  --es-positive-700: hsla(142, 72%, 29%, 1);
+  --es-positive-800: hsla(143, 64%, 24%, 1);
+  --es-positive-900: hsla(144, 61%, 20%, 1);
+
+  --es-warning-50: hsla(55, 92%, 95%, 1);
+  --es-warning-100: hsla(55, 97%, 88%, 1);
+  --es-warning-200: hsla(53, 98%, 77%, 1);
+  --es-warning-300: hsla(50, 98%, 64%, 1);
+  --es-warning-400: hsla(48, 96%, 53%, 1);
+  --es-warning-500: hsla(45, 93%, 47%, 1);
+  --es-warning-600: hsla(41, 96%, 40%, 1);
+  --es-warning-700: hsla(35, 92%, 33%, 1);
+  --es-warning-800: hsla(32, 81%, 29%, 1);
+  --es-warning-900: hsla(28, 73%, 26%, 1);
+
+  --es-info-50: hsla(214, 100%, 97%, 1);
+  --es-info-100: hsla(214, 95%, 93%, 1);
+  --es-info-200: hsla(213, 97%, 87%, 1);
+  --es-info-300: hsla(212, 96%, 78%, 1);
+  --es-info-400: hsla(213, 94%, 68%, 1);
+  --es-info-500: hsla(217, 91%, 60%, 1);
+  --es-info-600: hsla(221, 83%, 53%, 1);
+  --es-info-700: hsla(224, 76%, 48%, 1);
+  --es-info-800: hsla(226, 71%, 40%, 1);
+  --es-info-900: hsla(224, 64%, 33%, 1);
+}

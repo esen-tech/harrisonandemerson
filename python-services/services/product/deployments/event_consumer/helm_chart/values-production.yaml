@@ -1,0 +1,37 @@
+project:
+  name: &project-name product-event-consumer
+
+image:
+  repository: ${REPOSITORY_NAME}/${IMAGE_NAME}
+  tag: $RELEASE_IMAGE_TAG
+
+pod:
+  labels:
+    env: "production"
+    cluster: "esen-cloud-production"
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      cpu: 100m
+  priorityClassName: mid-priority
+  envs:
+    - name: ENV
+      value: production
+    - name: DATABASE_URL
+      value: $DATABASE_URL_PRODUCTION
+    - name: SCHEMA_NAME
+      value: esen_product
+    - name: AMQP_URL
+      value: $AMQP_URL_PRODUCTION
+    - name: SERVICE_ACCESS_TOKEN
+      value: $PRODUCT_SERVICE_ACCESS_TOKEN
+    - name: AIRTABLE_API_KEY
+      value: $AIRTABLE_API_KEY
+    - name: AIRTABLE_API_KEY_EDITOR
+      value: $AIRTABLE_API_KEY_EDITOR
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
